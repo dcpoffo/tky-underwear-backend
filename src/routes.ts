@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyPluginOptions, FastifyRequest, FastifyReply } from "fastify"
-import { CreateProdutoController } from "./controllers/CreateProdutoController"
-import { ListProdutosController } from "./controllers/ListProdutosController"
+import { CreateProdutoController } from "./controllers/produto/CreateProdutoController"
+import { ListProdutosController } from "./controllers/produto/ListProdutosController"
 
 export async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
 
@@ -14,6 +14,10 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
 
     fastify.post("/produto", async (request: FastifyRequest, reply: FastifyReply) => {
         return new CreateProdutoController().handle(request, reply);
+    })
+
+    fastify.delete("/produto", async (request: FastifyRequest, reply: FastifyReply) => {
+        return null;
     })
 
 }

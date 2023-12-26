@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { CreateProdutoService } from "../services/CreateProdutoService";
+import { CreateProdutoService } from "../../services/produto/CreateProdutoService";
 
 interface CreateProdutoProps {
     descricao: string,
