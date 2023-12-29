@@ -18,3 +18,14 @@ model Produto {
 
   @@map("produtos")
 }
+
+model Movimentacao {
+  id          Int       @id @default(autoincrement())
+  label String @db.VarChar(50)
+  type String @db.VarChar(1)
+  valor Float
+  paymentType String
+  date String
+
+  @@map("movimentacoes")
+}
