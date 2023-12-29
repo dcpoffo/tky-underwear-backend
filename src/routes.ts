@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyPluginOptions, FastifyRequest, FastifyReply } f
 import { CreateProdutoController } from "./controllers/produto/CreateProdutoController"
 import { ListProdutosController } from "./controllers/produto/ListProdutosController"
 import { ListMovimentacoesController } from "./controllers/movimentacao/ListMovimentacoesController"
+import { CreateMovimentacaoController } from "./controllers/movimentacao/CreateMovimentacaoController"
 
 export async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
 
@@ -26,6 +27,10 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
     //Movimentações
     fastify.get("/movimentacoes", async (request: FastifyRequest, reply: FastifyReply) => {
         return new ListMovimentacoesController().handle(request, reply);
+    })
+
+    fastify.post("/movimentacao", async (request: FastifyRequest, reply: FastifyReply) => {
+        return new CreateMovimentacaoController().handle(request, reply);
     })
 
 }
