@@ -11,7 +11,6 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
     })
 
     //Produtos
-
     fastify.get("/produtos", async (request: FastifyRequest, reply: FastifyReply) => {
         return new ListProdutosController().handle(request, reply);
     })
