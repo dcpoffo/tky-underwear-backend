@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { UpdateProdutoService } from '../../services/produto/UpdateProdutoService';
 
-interface CreateProdutoProps {
+interface UpdateProdutoProps {
 
     descricao: string,
     qtd_minima: number,
@@ -13,7 +13,7 @@ class UpdateProdutoController {
 
         const { id } = request.query as { id: string }
 
-        const { descricao, qtd_minima, barra } = request.body as CreateProdutoProps;
+        const { descricao, qtd_minima, barra } = request.body as UpdateProdutoProps;
 
         const produtoService = new UpdateProdutoService();
 

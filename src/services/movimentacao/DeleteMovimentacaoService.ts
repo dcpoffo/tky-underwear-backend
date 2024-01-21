@@ -22,7 +22,7 @@ class DeleteMovimentacaoService {
             throw new Error("Movimentação não existe")
         }
 
-        await prismaClient.produto.delete({
+        await prismaClient.movimentacao.delete({
             where:{
                 id:  findMovimentacao.id
             }

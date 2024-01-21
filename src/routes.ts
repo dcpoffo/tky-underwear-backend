@@ -6,6 +6,7 @@ import { CreateMovimentacaoController } from "./controllers/movimentacao/CreateM
 import { DeleteProdutoController } from "./controllers/produto/DeleteProdutoController"
 import { DeleteMovimentacaoController } from "./controllers/movimentacao/DeleteMovimentacaoController"
 import { UpdateProdutoController } from "./controllers/produto/UpdateProdutoController"
+import { UpdateMovimentacaoController } from "./controllers/movimentacao/UpdateMovimentacaoController"
 
 
 export async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
@@ -44,6 +45,10 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
 
     fastify.delete("/movimentacao", async (request: FastifyRequest, reply: FastifyReply) => {
         return new DeleteMovimentacaoController().handle(request, reply);
+    })
+
+    fastify.put("/movimentacao", async (request: FastifyRequest, reply: FastifyReply) => {
+        return new UpdateMovimentacaoController().handle(request, reply);
     })
 
 }
