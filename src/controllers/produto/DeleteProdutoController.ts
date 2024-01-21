@@ -2,7 +2,17 @@ import { FastifyRequest, FastifyReply } from 'fastify'
 import { DeleteProdutoService } from '../../services/produto/DeleteProdutoService'
 
 class DeleteProdutoController {
+    async handle(request: FastifyRequest, reply: FastifyReply) {
+        const { id } = request.query as { id: string }
+
+        const produtoService = new DeleteProdutoService();
+
+        const produto = await produtoService.execute({ id })
+
+        reply.send(produto);
+
+    }
 
 }
 
-export { DeleteProdutoService }
+export { DeleteProdutoController }

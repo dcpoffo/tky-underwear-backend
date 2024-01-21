@@ -1,0 +1,58 @@
+import prismaClient from "../../prisma";
+
+interface CreateProdutoProps {
+    id: string,
+    descricao: string,
+    qtd_minima: number,
+    barra: string
+}
+
+
+class UpdateProdutoService {
+
+    async execute({ id, descricao, qtd_minima, barra }: CreateProdutoProps) {
+
+        if (!id) {
+            throw new Error("Sem id não pode atualizar")
+        }
+
+        if (!descricao) {
+            throw new Error("Preencha a descrição");
+        }
+
+        if (!qtd_minima) {
+            qtd_minima = 0;
+        }
+
+        if (!barra) {
+            barra = "0";
+        }
+
+        const findProduto = await prismaClient.produto.findFirst({
+            where: {
+                id: Number(id)
+            }
+        })
+
+        if (!findProduto) {
+            throw new Error("Produto não existe")
+        }        
+
+        const produto = await prismaClient.produto.update({
+            where: {
+                id: findProduto.id
+            },
+
+            data: {
+                descricao,
+                qtd_minima,
+                barra
+            }
+        })
+
+        return produto
+    }
+
+}
+
+export { UpdateProdutoService }
