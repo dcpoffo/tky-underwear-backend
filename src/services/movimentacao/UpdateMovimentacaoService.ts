@@ -14,7 +14,7 @@ class UpdateMovimentacaoService {
     async execute({ id, label, type, valor, paymentType, date }: UpdateMovimentacaoProps) {
 
         if (!id) {
-            throw new Error("Sem id não pode atualizar")
+            throw new Error("Sem Id não pode atualizar")
         }          
         
         const findMovimentacao = await prismaClient.movimentacao.findFirst({
