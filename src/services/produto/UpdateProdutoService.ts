@@ -3,14 +3,13 @@ import prismaClient from "../../prisma";
 interface UpdateProdutoProps {
     id: string,
     descricao: string,
-    qtd_minima: number,
     barra: string
 }
 
 
 class UpdateProdutoService {
 
-    async execute({ id, descricao, qtd_minima, barra }: UpdateProdutoProps) {
+    async execute({ id, descricao, barra }: UpdateProdutoProps) {
 
         if (!id) {
             throw new Error("Sem id não pode atualizar")
@@ -28,11 +27,7 @@ class UpdateProdutoService {
         
         if (!descricao) {
             throw new Error("Preencha a descrição");
-        }
-
-        if (!qtd_minima) {
-            qtd_minima = 0;
-        }
+        }        
 
         if (!barra) {
             barra = "0";
@@ -45,7 +40,6 @@ class UpdateProdutoService {
 
             data: {
                 descricao,
-                qtd_minima,
                 barra
             }
         })

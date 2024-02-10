@@ -3,8 +3,7 @@ import { UpdateProdutoService } from '../../services/produto/UpdateProdutoServic
 
 interface UpdateProdutoProps {
 
-    descricao: string,
-    qtd_minima: number,
+    descricao: string,    
     barra: string
 }
 
@@ -13,11 +12,11 @@ class UpdateProdutoController {
 
         const { id } = request.query as { id: string }
 
-        const { descricao, qtd_minima, barra } = request.body as UpdateProdutoProps;
+        const { descricao, barra } = request.body as UpdateProdutoProps;
 
         const produtoService = new UpdateProdutoService();
 
-        const produto = await produtoService.execute({ id, descricao, qtd_minima, barra });
+        const produto = await produtoService.execute({ id, descricao, barra });
 
         reply.send(produto);
     }

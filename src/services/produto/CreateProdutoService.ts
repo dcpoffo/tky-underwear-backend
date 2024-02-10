@@ -1,14 +1,13 @@
 import prismaClient from "../../prisma";
 
 interface CreateProdutoProps {
-    descricao: string,
-    qtd_minima: number,
+    descricao: string,    
     barra: string
 }
 
 class CreateProdutoService {
 
-    async execute({descricao, qtd_minima, barra}: CreateProdutoProps){
+    async execute({descricao, barra}: CreateProdutoProps){
         
         if (!descricao) {
             throw new Error("Preencha a descrição");
@@ -17,7 +16,6 @@ class CreateProdutoService {
         const produto = await prismaClient.produto.create({
             data: {
                 descricao,
-                qtd_minima,
                 barra
             }
         })
