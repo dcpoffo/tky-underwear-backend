@@ -10,6 +10,7 @@ import { UpdateMovimentacaoController } from "./controllers/movimentacao/UpdateM
 import { ListCorController } from "./controllers/cor/ListCorController"
 import { CreateCorController } from "./controllers/cor/CreateCorController"
 import { UpdateCorController } from "./controllers/cor/UpdateCorController"
+import { DeleteCorController } from "./controllers/cor/DeleteCorController"
 
 
 export async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
@@ -65,9 +66,9 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
         return new CreateCorController().handle(request, reply);
     })
 
-    // fastify.delete("/cor", async (request: FastifyRequest, reply: FastifyReply) => {
-    //     return new DeleteCorController().handle(request, reply);
-    // })
+    fastify.delete("/cor", async (request: FastifyRequest, reply: FastifyReply) => {
+        return new DeleteCorController().handle(request, reply);
+    })
 
     fastify.put("/cor", async (request: FastifyRequest, reply: FastifyReply) => {
         return new UpdateCorController().handle(request, reply);
