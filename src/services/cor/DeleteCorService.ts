@@ -22,7 +22,7 @@ class DeleteCorService {
             throw new Error("Cor não existe")
         }
 
-        await prismaClient.produto.delete({
+        await prismaClient.cor.delete({
             where: {
                 id: findCor.id
             }
