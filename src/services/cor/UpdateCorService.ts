@@ -8,7 +8,10 @@ interface UpdateCorProps {
 class UpdateCorService {
 
     async execute({ id, descricao}: UpdateCorProps) {
-
+        
+        if (!id) {
+            throw new Error("Sem id não dá pra atualizar")
+        }
         
         const findCor = await prismaClient.cor.findFirst({
             where: {
@@ -19,10 +22,7 @@ class UpdateCorService {
         if (!findCor) {
             throw new Error("Cor não existe")
         }
-        
-        if (!id) {
-            throw new Error("Sem id não dá pra atualizar")
-        }
+
 
         if (!descricao) {
             throw new Error("Preencha a descrição");
