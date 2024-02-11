@@ -9,6 +9,7 @@ import { UpdateProdutoController } from "./controllers/produto/UpdateProdutoCont
 import { UpdateMovimentacaoController } from "./controllers/movimentacao/UpdateMovimentacaoController"
 import { ListCorController } from "./controllers/cor/ListCorController"
 import { CreateCorController } from "./controllers/cor/CreateCorController"
+import { UpdateCorController } from "./controllers/cor/UpdateCorController"
 
 
 export async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
@@ -68,9 +69,9 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
     //     return new DeleteCorController().handle(request, reply);
     // })
 
-    // fastify.put("/cor", async (request: FastifyRequest, reply: FastifyReply) => {
-    //     return new UpdateCorController().handle(request, reply);
-    // })
+    fastify.put("/cor", async (request: FastifyRequest, reply: FastifyReply) => {
+        return new UpdateCorController().handle(request, reply);
+    })
     
 
 }
