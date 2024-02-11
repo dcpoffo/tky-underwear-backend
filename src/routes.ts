@@ -7,6 +7,8 @@ import { DeleteProdutoController } from "./controllers/produto/DeleteProdutoCont
 import { DeleteMovimentacaoController } from "./controllers/movimentacao/DeleteMovimentacaoController"
 import { UpdateProdutoController } from "./controllers/produto/UpdateProdutoController"
 import { UpdateMovimentacaoController } from "./controllers/movimentacao/UpdateMovimentacaoController"
+import { ListCorController } from "./controllers/cor/ListCorController"
+import { CreateCorController } from "./controllers/cor/CreateCorController"
 
 
 export async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
@@ -50,5 +52,25 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
     fastify.put("/movimentacao", async (request: FastifyRequest, reply: FastifyReply) => {
         return new UpdateMovimentacaoController().handle(request, reply);
     })
+
+    /////////////////////////////////////////////////
+
+    //Cores
+    fastify.get("/cores", async (request: FastifyRequest, reply: FastifyReply) => {
+        return new ListCorController().handle(request, reply);
+    })
+
+    fastify.post("/cor", async (request: FastifyRequest, reply: FastifyReply) => {
+        return new CreateCorController().handle(request, reply);
+    })
+
+    // fastify.delete("/cor", async (request: FastifyRequest, reply: FastifyReply) => {
+    //     return new DeleteCorController().handle(request, reply);
+    // })
+
+    // fastify.put("/cor", async (request: FastifyRequest, reply: FastifyReply) => {
+    //     return new UpdateCorController().handle(request, reply);
+    // })
+    
 
 }
