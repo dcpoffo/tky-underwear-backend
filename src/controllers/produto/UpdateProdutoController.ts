@@ -2,8 +2,10 @@ import { FastifyRequest, FastifyReply } from 'fastify'
 import { UpdateProdutoService } from '../../services/produto/UpdateProdutoService';
 
 interface UpdateProdutoProps {
-
-    descricao: string,    
+    descricao: string,
+    tipo: string,
+    modelagem: string,
+    grade: string,
     barra: string
 }
 
@@ -12,11 +14,11 @@ class UpdateProdutoController {
 
         const { id } = request.query as { id: string }
 
-        const { descricao, barra } = request.body as UpdateProdutoProps;
+        const { descricao, tipo, modelagem, grade, barra } = request.body as UpdateProdutoProps;
 
         const produtoService = new UpdateProdutoService();
 
-        const produto = await produtoService.execute({ id, descricao, barra });
+        const produto = await produtoService.execute({ id, descricao, tipo, modelagem, grade, barra });
 
         reply.send(produto);
     }
