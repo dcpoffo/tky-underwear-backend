@@ -3,7 +3,7 @@ import prismaClient from "../../prisma";
 class ListProdutosService {
     async execute() {
 
-        const customers = await prismaClient.produto.findMany(
+        const produtos = await prismaClient.produto.findMany(
             {
                 orderBy: {
                     id: 'asc'
@@ -11,7 +11,7 @@ class ListProdutosService {
             }
         );
 
-        return customers;
+        return produtos;
     }
 }
 
