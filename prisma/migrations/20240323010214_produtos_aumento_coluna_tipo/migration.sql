@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "produtos" ALTER COLUMN "tipo" SET DATA TYPE VARCHAR(8);

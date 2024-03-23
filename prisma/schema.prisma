@@ -17,7 +17,7 @@ model Cor {
 model Produto {
   id        Int     @id @default(autoincrement())  
   descricao String  @db.VarChar(50)
-  tipo      String  @db.VarChar(6)
+  tipo      String  @db.VarChar(8)
   modelagem String  @db.VarChar(8)
   grade     String  @db.VarChar(3)
   barra     String? @db.VarChar(13)
