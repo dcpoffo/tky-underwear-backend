@@ -6,17 +6,17 @@ interface CreateProdutoProps {
     tipo: string,
     modelagem: string,
     grade: string,
-    barra: string
-    
+    barra: string,
+    qtdEstoque: number
 }
 
 class CreateProdutoController {
     async handle(request: FastifyRequest, reply: FastifyReply) {
-        const { descricao, tipo, modelagem, grade, barra } = request.body as CreateProdutoProps;
+        const { descricao, tipo, modelagem, grade, barra, qtdEstoque } = request.body as CreateProdutoProps;
        
         const produtoService = new CreateProdutoService();
 
-        const produto = await produtoService.execute({descricao, tipo, modelagem, grade, barra});
+        const produto = await produtoService.execute({ descricao, tipo, modelagem, grade, barra, qtdEstoque });
 
         reply.send(produto);
     }

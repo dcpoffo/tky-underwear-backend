@@ -5,12 +5,13 @@ interface CreateProdutoProps {
     tipo: string,
     modelagem: string,
     grade: string,
-    barra: string
+    barra: string,
+    qtdEstoque: number
 }
 
 class CreateProdutoService {
 
-    async execute({descricao, tipo, modelagem, grade, barra}: CreateProdutoProps){
+    async execute({ descricao, tipo, modelagem, grade, barra, qtdEstoque }: CreateProdutoProps){
         
         if (!descricao) {
             throw new Error("Preencha a descrição");
@@ -32,13 +33,18 @@ class CreateProdutoService {
             barra = "0";
         }
 
+        if (!qtdEstoque) {
+            qtdEstoque = 0;
+        }
+
         const produto = await prismaClient.produto.create({
             data: {
                 descricao,
                 tipo,
                 modelagem,
                 grade,
-                barra
+                barra, 
+                qtdEstoque
             }
         })
 

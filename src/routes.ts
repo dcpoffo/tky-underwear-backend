@@ -11,6 +11,9 @@ import { ListCorController } from "./controllers/cor/ListCorController"
 import { CreateCorController } from "./controllers/cor/CreateCorController"
 import { UpdateCorController } from "./controllers/cor/UpdateCorController"
 import { DeleteCorController } from "./controllers/cor/DeleteCorController"
+import { ListMovimentacaoEstoqueController } from "./controllers/movimentaEstoque/ListMovimentacaoEstoqueController"
+import { CreateMovimentacaoEstoqueController } from "./controllers/movimentaEstoque/CreateMovimentacaoEstoqueController"
+
 
 
 export async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
@@ -53,6 +56,17 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
 
     fastify.put("/movimentacao", async (request: FastifyRequest, reply: FastifyReply) => {
         return new UpdateMovimentacaoController().handle(request, reply);
+    })
+
+    /////////////////////////////////////////////////
+
+    //Movimentações de Estoque
+    fastify.get("/estoque", async (request: FastifyRequest, reply: FastifyReply) => {
+        return new ListMovimentacaoEstoqueController().handle(request, reply);
+    })
+
+    fastify.post("/estoqueMove", async (request: FastifyRequest, reply: FastifyReply) => {
+        return new CreateMovimentacaoEstoqueController().handle(request, reply);
     })
 
     /////////////////////////////////////////////////

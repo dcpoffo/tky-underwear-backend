@@ -15,12 +15,14 @@ model Cor {
 }
 
 model Produto {
-  id        Int     @id @default(autoincrement())  
-  descricao String  @db.VarChar(50)
-  tipo      String  @db.VarChar(8)
-  modelagem String  @db.VarChar(8)
-  grade     String  @db.VarChar(3)
-  barra     String? @db.VarChar(13)
+  id          Int     @id @default(autoincrement())  
+  descricao   String  @db.VarChar(50)
+  tipo        String  @db.VarChar(8)
+  modelagem   String  @db.VarChar(8)
+  grade       String  @db.VarChar(3)
+  qtdEstoque  Int? @default(0)
+  barra       String? @db.VarChar(13)
+  movimentacoesEstoque MovimentaEstoque[]
 
   @@map("produtos")
 }
@@ -34,4 +36,20 @@ model Movimentacao {
   date        String
 
   @@map("movimentacoes")
+}
+
+model MovimentaEstoque {
+  id          Int @id @default(autoincrement())
+  // 0 - Entrada 
+  // 1 - Saida
+  tipo        String @db.VarChar(1)
+  // Movimentação de ENTRADA no estoque
+  // Movimentação de SAIDA no estoquer
+  descricao   String @db.VarChar(50)
+  data        DateTime @default(now())
+  quantidade  Int
+  produto Produto @relation(fields: [idProduto],  references: [id])
+  idProduto   Int
+
+  @@map("movimentaEstoque")
 }
