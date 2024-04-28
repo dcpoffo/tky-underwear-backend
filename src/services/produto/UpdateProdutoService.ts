@@ -9,7 +9,6 @@ interface UpdateProdutoProps {
     barra: string
 }
 
-
 class UpdateProdutoService {
 
     async execute({ id, descricao, tipo, modelagem, grade, barra }: UpdateProdutoProps) {

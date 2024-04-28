@@ -5,6 +5,9 @@ class ListMovimentacaoEstoqueService {
 
         const movimentacoes = await prismaClient.movimentaEstoque.findMany(
             {
+                include: {
+                    produto: true,
+                },
                 orderBy: {
                     id: 'asc'
                 }

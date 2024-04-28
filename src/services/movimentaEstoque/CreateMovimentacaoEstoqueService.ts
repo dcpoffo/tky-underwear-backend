@@ -4,7 +4,7 @@ interface CreateMovimentaEstoqueProps {
     idProduto: number,
     tipo: string,
     descricao: string,
-    quantidade: number
+    quantidade: number;
 }
 
 class CreateMovimentacaoEstoqueService {
