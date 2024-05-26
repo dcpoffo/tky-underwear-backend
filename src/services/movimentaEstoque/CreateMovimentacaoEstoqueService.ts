@@ -26,7 +26,7 @@ class CreateMovimentacaoEstoqueService {
         }
 
         if (tipo === "1" && quantidade > findProduto.qtdEstoque) {
-            throw new Error(`Quantidade insufuciante em estoque! Quantidade em estoque: ${findProduto.qtdEstoque}`);
+            throw new Error(`Quantidade insufuciente em estoque! Quantidade em estoque: ${findProduto.qtdEstoque}`);
         }
 
         const movimentacoes = await prismaClient.movimentaEstoque.create({

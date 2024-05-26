@@ -9,7 +9,7 @@ class ListMovimentacaoEstoqueService {
                     produto: true,
                 },
                 orderBy: {
-                    id: 'asc'
+                    data: 'asc'
                 }
             }
         );
