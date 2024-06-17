@@ -7,13 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Cor {
-  id Int @id @default(autoincrement())
-  descricao String @db.VarChar(20)
-
-  @@map("cores")
-}
-
 model Produto {
   id          Int     @id @default(autoincrement())  
   descricao   String  @db.VarChar(50)
@@ -22,6 +15,7 @@ model Produto {
   grade       String  @db.VarChar(3)
   qtdEstoque  Int? @default(0)
   barra       String? @db.VarChar(13)
+  itensVenda ItensVenda[]
   movimentacoesEstoque MovimentaEstoque[]
 
   @@map("produtos")
@@ -52,4 +46,26 @@ model MovimentaEstoque {
   idProduto   Int
 
   @@map("movimentaEstoque")
+}
+
+model Venda {
+  id           Int          @id @default(autoincrement())
+  data         DateTime @default(now())
+  valorVenda   Float
+  itensDaVenda ItensVenda[]
+
+  @@map("venda")
+}
+
+model ItensVenda {
+  id            Int    @id @default(autoincrement())
+  idVenda       Int
+  idProduto     Int
+  quantidade    Int
+  valorUnitario Float
+  total         Float
+  produto       Produto @relation(fields: [idProduto], references: [id])
+  venda         Venda  @relation(fields: [idVenda], references: [id])
+
+  @@map("itensVenda")
 }

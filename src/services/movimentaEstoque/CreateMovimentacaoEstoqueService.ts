@@ -26,7 +26,7 @@ class CreateMovimentacaoEstoqueService {
         }
 
         if (tipo === "1" && quantidade > findProduto.qtdEstoque) {
-            throw new Error(`Quantidade insufuciente em estoque! Quantidade em estoque: ${findProduto.qtdEstoque}`);
+            throw new Error(`Quantidade insuficiente em estoque! Quantidade em estoque: ${findProduto.qtdEstoque}`);
         }
 
         const movimentacoes = await prismaClient.movimentaEstoque.create({
@@ -36,27 +36,37 @@ class CreateMovimentacaoEstoqueService {
                 descricao,
                 quantidade
             }
-        })
+        })      
 
-        //nova quantidade a se movimentada no estoque
-        var novaQuantidade = findProduto.qtdEstoque;
+        //atualizar estoque dependendo do tipo
         if (tipo === "0") { // 0 - entrada
-            novaQuantidade += quantidade;
+
+            const produto = await prismaClient.produto.update({
+                where: {
+                    id: findProduto.id
+                },
+
+                data: {
+                    qtdEstoque: {
+                        increment: quantidade
+                    }
+                }
+            })
 
         } else { // 1 - saida
-            novaQuantidade -= quantidade;
-        }
-        
-        //atualizar estoque
-        const produto = await prismaClient.produto.update({
-            where: {
-                id: findProduto.id
-            },
 
-            data: {
-                qtdEstoque: novaQuantidade
-            }
-        })
+            const produto = await prismaClient.produto.update({
+                where: {
+                    id: findProduto.id
+                },
+
+                data: {
+                    qtdEstoque: {
+                        decrement: quantidade
+                    }
+                }
+            })
+        }
 
         return movimentacoes
 

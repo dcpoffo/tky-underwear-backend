@@ -1,20 +1,16 @@
-import { FastifyInstance, FastifyPluginOptions, FastifyRequest, FastifyReply } from "fastify"
-import { CreateProdutoController } from "./controllers/produto/CreateProdutoController"
-import { ListProdutosController } from "./controllers/produto/ListProdutosController"
-import { ListMovimentacoesController } from "./controllers/movimentacao/ListMovimentacoesController"
-import { CreateMovimentacaoController } from "./controllers/movimentacao/CreateMovimentacaoController"
-import { DeleteProdutoController } from "./controllers/produto/DeleteProdutoController"
-import { DeleteMovimentacaoController } from "./controllers/movimentacao/DeleteMovimentacaoController"
-import { UpdateProdutoController } from "./controllers/produto/UpdateProdutoController"
-import { UpdateMovimentacaoController } from "./controllers/movimentacao/UpdateMovimentacaoController"
-import { ListCorController } from "./controllers/cor/ListCorController"
-import { CreateCorController } from "./controllers/cor/CreateCorController"
-import { UpdateCorController } from "./controllers/cor/UpdateCorController"
-import { DeleteCorController } from "./controllers/cor/DeleteCorController"
-import { ListMovimentacaoEstoqueController } from "./controllers/movimentaEstoque/ListMovimentacaoEstoqueController"
+import { FastifyInstance, FastifyPluginOptions, FastifyReply, FastifyRequest } from "fastify"
 import { CreateMovimentacaoEstoqueController } from "./controllers/movimentaEstoque/CreateMovimentacaoEstoqueController"
-
-
+import { ListMovimentacaoEstoqueController } from "./controllers/movimentaEstoque/ListMovimentacaoEstoqueController"
+import { CreateMovimentacaoController } from "./controllers/movimentacao/CreateMovimentacaoController"
+import { DeleteMovimentacaoController } from "./controllers/movimentacao/DeleteMovimentacaoController"
+import { ListMovimentacoesController } from "./controllers/movimentacao/ListMovimentacoesController"
+import { UpdateMovimentacaoController } from "./controllers/movimentacao/UpdateMovimentacaoController"
+import { CreateProdutoController } from "./controllers/produto/CreateProdutoController"
+import { DeleteProdutoController } from "./controllers/produto/DeleteProdutoController"
+import { ListProdutosController } from "./controllers/produto/ListProdutosController"
+import { UpdateProdutoController } from "./controllers/produto/UpdateProdutoController"
+import { ListVendaController } from "./controllers/venda/ListVendaController"
+import { CreateVendaController } from "./controllers/venda/CreateVendaController"
 
 export async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
 
@@ -67,26 +63,16 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
 
     fastify.post("/estoqueMove", async (request: FastifyRequest, reply: FastifyReply) => {
         return new CreateMovimentacaoEstoqueController().handle(request, reply);
+    })  
+
+    //Vendas
+    fastify.get("/vendas", async (request: FastifyRequest, reply: FastifyReply) => {
+        return new ListVendaController().handle(request, reply);
     })
 
-    /////////////////////////////////////////////////
-
-    //Cores
-    fastify.get("/cores", async (request: FastifyRequest, reply: FastifyReply) => {
-        return new ListCorController().handle(request, reply);
-    })
-
-    fastify.post("/cor", async (request: FastifyRequest, reply: FastifyReply) => {
-        return new CreateCorController().handle(request, reply);
-    })
-
-    fastify.delete("/cor", async (request: FastifyRequest, reply: FastifyReply) => {
-        return new DeleteCorController().handle(request, reply);
-    })
-
-    fastify.put("/cor", async (request: FastifyRequest, reply: FastifyReply) => {
-        return new UpdateCorController().handle(request, reply);
-    })
+    fastify.post("/vendas", async (request: FastifyRequest, reply: FastifyReply) => {
+        return new CreateVendaController().handle(request, reply);
+    })  
     
 
 }
