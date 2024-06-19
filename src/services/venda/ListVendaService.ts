@@ -6,7 +6,11 @@ class ListVendaService {
         const vendas = await prismaClient.venda.findMany(
             {
                 include: {
-                    itensDaVenda: true,
+                    itensDaVenda: {
+                        include: {
+                            produto: true
+                        }
+                    }
                 },
                 orderBy: {
                     id: 'asc'
