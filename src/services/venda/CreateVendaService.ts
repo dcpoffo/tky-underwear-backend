@@ -37,6 +37,8 @@ class CreateVendaService {
             }
         }
 
+        valorVenda = itensVenda.reduce((acc, item) => acc + (item.quantidade * item.valorUnitario), 0);
+
         const vendas = await prismaClient.venda.create({
             data: {
                 valorVenda,
