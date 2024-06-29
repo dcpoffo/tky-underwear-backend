@@ -53,7 +53,9 @@ class CreateVendaService {
                         }))
                     }
                 },
-                include: { itensDaVenda: true },
+                include: { 
+                    itensDaVenda: true 
+                },
             });
 
             // Atualizar o estoque dos produtos
@@ -74,7 +76,7 @@ class CreateVendaService {
 
         } catch (error) {
             // Captura e trata erros
-            console.log("Erro ao cadastrar venda:", error);
+            console.log("Erro ao cadastrar venda: ", error);
             throw error; // Lança o erro para ser tratado no lado do cliente
         }
     }

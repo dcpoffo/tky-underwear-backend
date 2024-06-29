@@ -1,75 +1,93 @@
+import { error } from "console";
 import prismaClient from "../../prisma";
 
-interface CreateMovimentaEstoqueProps {
-    idProduto: number,
+interface CreateMovimentacaoEstoqueProps {
     tipo: string,
     descricao: string,
-    quantidade: number;
+    itensMovimentacaoEstoque: ItensMovimentacaoEstoqueProps[]
+}
+
+interface ItensMovimentacaoEstoqueProps {
+    idProduto: number,
+    quantidade: number
 }
 
 class CreateMovimentacaoEstoqueService {
 
-    async execute({ idProduto, tipo, descricao, quantidade }: CreateMovimentaEstoqueProps) {
+    async execute({ tipo, descricao, itensMovimentacaoEstoque }: CreateMovimentacaoEstoqueProps) {
 
-        const findProduto = await prismaClient.produto.findFirst({
-            where: {
-                id: Number(idProduto)
-            }
-        })
+        try {
+            // verifica se todos os produtos existem e tem estoque suciente
+            for (const item of itensMovimentacaoEstoque) {
+                const findProduto = await prismaClient.produto.findUnique({
+                    where: {
+                        id: item.idProduto,
+                    },
+                });
 
-        if (!findProduto) {
-            throw new Error("Produto não existe")
-        }
-
-        if (quantidade === 0) {
-            throw new Error("Quantidade não pode ser 0!")
-        }
-
-        if (tipo === "1" && quantidade > findProduto.qtdEstoque) {
-            throw new Error(`Quantidade insuficiente em estoque! Quantidade em estoque: ${findProduto.qtdEstoque}`);
-        }
-
-        const movimentacoes = await prismaClient.movimentaEstoque.create({
-            data: {
-                idProduto,
-                tipo,
-                descricao,
-                quantidade
-            }
-        })      
-
-        //atualizar estoque dependendo do tipo
-        if (tipo === "0") { // 0 - entrada
-
-            const produto = await prismaClient.produto.update({
-                where: {
-                    id: findProduto.id
-                },
-
-                data: {
-                    qtdEstoque: {
-                        increment: quantidade
-                    }
+                if (!findProduto) {
+                    throw new Error(`Produto com Código ${item.idProduto} não existe`);
                 }
-            })
 
-        } else { // 1 - saida
-
-            const produto = await prismaClient.produto.update({
-                where: {
-                    id: findProduto.id
-                },
-
-                data: {
-                    qtdEstoque: {
-                        decrement: quantidade
-                    }
+                if (item.quantidade === 0 && tipo === "0") {
+                    throw new Error(`No produto com Código ${item.idProduto} não foi informada a quantidade!`)
                 }
-            })
+
+                if (findProduto.qtdEstoque < item.quantidade) {
+                    throw new Error(`Produto com Código ${item.idProduto} não tem quantidade suficiente em estoque. Quantidade em estoque: ${findProduto.qtdEstoque}`);
+                }
+            }
+
+            const movimentacoes = await prismaClient.movimentacaoEstoque.create({
+                data: {
+                    tipo,
+                    descricao,
+                    itensMovimentacaoEstoque: {
+                        create: itensMovimentacaoEstoque.map(item => ({
+                            idProduto: item.idProduto,
+                            quantidade: item.quantidade
+                        }))
+                    }
+                }, include: {
+                    itensMovimentacaoEstoque: true
+                },
+            });
+
+            //atualizar estoque dependendo do tipo
+            if (tipo === "0") { // 0 - entrada
+                for (const item of itensMovimentacaoEstoque) {
+                    await prismaClient.produto.update({
+                        where: {
+                            id: item.idProduto
+                        },
+                        data: {
+                            qtdEstoque: {
+                                increment: item.quantidade,
+                            }
+                        }
+                    })
+                }
+            } else { // 1 - saida
+                for (const item of itensMovimentacaoEstoque) {
+                    await prismaClient.produto.update({
+                        where: {
+                            id: item.idProduto
+                        },
+                        data: {
+                            qtdEstoque: {
+                                decrement: item.quantidade,
+                            }
+                        }
+                    })
+                }
+            }
+
+            return movimentacoes;
+
+        } catch (error) {
+            console.log("Erro ao realizar movimentação: ", error);
+            throw error;
         }
-
-        return movimentacoes
-
     }
 }
 

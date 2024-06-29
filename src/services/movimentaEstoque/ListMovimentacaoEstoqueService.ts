@@ -3,10 +3,14 @@ import prismaClient from "../../prisma";
 class ListMovimentacaoEstoqueService {
     async execute() {
 
-        const movimentacoes = await prismaClient.movimentaEstoque.findMany(
+        const movimentacoes = await prismaClient.movimentacaoEstoque.findMany(
             {
                 include: {
-                    produto: true,
+                    itensMovimentacaoEstoque: {
+                        include: {
+                            produto: true
+                        }
+                    }
                 },
                 orderBy: {
                     data: 'asc'

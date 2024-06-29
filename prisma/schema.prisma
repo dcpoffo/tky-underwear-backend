@@ -16,36 +16,32 @@ model Produto {
   qtdEstoque  Int? @default(0)
   barra       String? @db.VarChar(13)
   itensVenda ItensVenda[]
-  movimentacoesEstoque MovimentaEstoque[]
+  itensMovimentacaoEstoque ItensMovimentacaoEstoque[]
 
   @@map("produtos")
 }
 
-model Movimentacao {
-  id          Int    @id @default(autoincrement())
-  label       String @db.VarChar(50)
-  type        String @db.VarChar(1)
-  valor       Float
-  paymentType String
-  date        String
-
-  @@map("movimentacoes")
-}
-
-model MovimentaEstoque {
+model MovimentacaoEstoque {
   id          Int @id @default(autoincrement())
   // 0 - Entrada 
   // 1 - Saida
   tipo        String @db.VarChar(1)
-  // Movimentação de ENTRADA no estoque
-  // Movimentação de SAIDA no estoquer
   descricao   String @db.VarChar(50)
   data        DateTime @default(now())
-  quantidade  Int
-  produto Produto @relation(fields: [idProduto],  references: [id])
-  idProduto   Int
+  itensMovimentacaoEstoque ItensMovimentacaoEstoque[]  
 
-  @@map("movimentaEstoque")
+  @@map("movimentacaoEstoque")
+}
+
+model ItensMovimentacaoEstoque {
+  id                    Int @id @default(autoincrement())
+  idMovimentacaoEstoque Int
+  idProduto             Int
+  quantidade            Int
+  produto Produto @relation(fields: [idProduto],  references: [id])
+  movimentacaoEstoque MovimentacaoEstoque @relation(fields: [idMovimentacaoEstoque], references: [id])
+
+  @@map("itensMovimentacaoEstoque")
 }
 
 model Venda {
