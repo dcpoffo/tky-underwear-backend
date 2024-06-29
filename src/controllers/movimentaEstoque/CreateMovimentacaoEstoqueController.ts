@@ -17,6 +17,10 @@ class CreateMovimentacaoEstoqueController {
 
         const { tipo, descricao, itensMovimentacaoEstoque } = request.body as CreateMovimentacaoEstoqueProps;
 
+        if (!Array.isArray(itensMovimentacaoEstoque)) {
+            return reply.status(400).send({ error: "itensMovimentacaoEstoque should be an array" });
+        }
+        
         const movimentacaoEstoqueService = new CreateMovimentacaoEstoqueService();
 
         const movimentacao = await movimentacaoEstoqueService.execute({ tipo, descricao, itensMovimentacaoEstoque });

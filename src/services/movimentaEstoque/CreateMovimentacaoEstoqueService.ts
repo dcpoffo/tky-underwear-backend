@@ -16,6 +16,10 @@ class CreateMovimentacaoEstoqueService {
 
     async execute({ tipo, descricao, itensMovimentacaoEstoque }: CreateMovimentacaoEstoqueProps) {
 
+        if (!Array.isArray(itensMovimentacaoEstoque)) {
+            throw new Error("itensMovimentacaoEstoque should be an array");
+        }
+        
         try {
             // verifica se todos os produtos existem e tem estoque suciente
             for (const item of itensMovimentacaoEstoque) {
@@ -48,7 +52,8 @@ class CreateMovimentacaoEstoqueService {
                             quantidade: item.quantidade
                         }))
                     }
-                }, include: {
+                }, 
+                include: {
                     itensMovimentacaoEstoque: true
                 },
             });
