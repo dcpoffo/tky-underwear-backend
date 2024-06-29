@@ -16,10 +16,6 @@ class CreateMovimentacaoEstoqueService {
 
     async execute({ tipo, descricao, itensMovimentacaoEstoque }: CreateMovimentacaoEstoqueProps) {
 
-        if (!Array.isArray(itensMovimentacaoEstoque)) {
-            throw new Error("itensMovimentacaoEstoque should be an array");
-        }
-        
         try {
             // verifica se todos os produtos existem e tem estoque suciente
             for (const item of itensMovimentacaoEstoque) {
@@ -37,7 +33,7 @@ class CreateMovimentacaoEstoqueService {
                     throw new Error(`No produto com Código ${item.idProduto} não foi informada a quantidade!`)
                 }
 
-                if ( (tipo === "1") && (findProduto.qtdEstoque < item.quantidade)) {
+                if ((tipo === "1") && (findProduto.qtdEstoque < item.quantidade)) {
                     throw new Error(`Produto com Código ${item.idProduto} não tem quantidade suficiente em estoque. Quantidade em estoque: ${findProduto.qtdEstoque}`);
                 }
             }
@@ -52,7 +48,7 @@ class CreateMovimentacaoEstoqueService {
                             quantidade: item.quantidade
                         }))
                     }
-                }, 
+                },
                 include: {
                     itensMovimentacaoEstoque: true
                 },
