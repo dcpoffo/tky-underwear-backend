@@ -8,27 +8,27 @@ datasource db {
 }
 
 model Produto {
-  id          Int     @id @default(autoincrement())  
-  descricao   String  @db.VarChar(50)
-  tipo        String  @db.VarChar(8)
-  modelagem   String  @db.VarChar(8)
-  grade       String  @db.VarChar(3)
-  qtdEstoque  Int? @default(0)
-  barra       String? @db.VarChar(13)
-  itensVenda ItensVenda[]
-  itensMovimentacaoEstoque ItensMovimentacaoEstoque[]
+  id                        Int     @id @default(autoincrement())  
+  descricao                 String  @db.VarChar(50)
+  tipo                      String  @db.VarChar(8)
+  modelagem                 String  @db.VarChar(8)
+  grade                     String  @db.VarChar(3)
+  qtdEstoque                Int? @default(0)
+  barra                     String? @db.VarChar(13)
+  itensVenda                ItensVenda[]
+  itensMovimentacaoEstoque  ItensMovimentacaoEstoque[]
 
   @@map("produtos")
 }
 
 model MovimentacaoEstoque {
-  id          Int @id @default(autoincrement())
+  id                        Int @id @default(autoincrement())
   // 0 - Entrada 
   // 1 - Saida
-  tipo        String @db.VarChar(1)
-  descricao   String @db.VarChar(50)
-  data        DateTime @default(now())
-  itensMovimentacaoEstoque ItensMovimentacaoEstoque[]  
+  tipo                      String @db.VarChar(1)
+  descricao                 String @db.VarChar(100)
+  data                      DateTime @default(now())
+  itensMovimentacaoEstoque  ItensMovimentacaoEstoque[]  
 
   @@map("movimentacaoEstoque")
 }
@@ -38,23 +38,24 @@ model ItensMovimentacaoEstoque {
   idMovimentacaoEstoque Int
   idProduto             Int
   quantidade            Int
-  produto Produto @relation(fields: [idProduto],  references: [id])
-  movimentacaoEstoque MovimentacaoEstoque @relation(fields: [idMovimentacaoEstoque], references: [id])
+  produto               Produto @relation(fields: [idProduto],  references: [id])
+  movimentacaoEstoque   MovimentacaoEstoque @relation(fields: [idMovimentacaoEstoque], references: [id])
 
   @@map("itensMovimentacaoEstoque")
 }
 
 model Venda {
-  id           Int          @id @default(autoincrement())
-  data         DateTime @default(now())
-  valorVenda   Float
-  itensDaVenda ItensVenda[]
+  id            Int @id @default(autoincrement())
+  descricao     String @default("Venda") @db.VarChar(100)
+  data          DateTime @default(now())
+  valorVenda    Float
+  itensDaVenda  ItensVenda[]
 
   @@map("venda")
 }
 
 model ItensVenda {
-  id            Int    @id @default(autoincrement())
+  id            Int @id @default(autoincrement())
   idVenda       Int
   idProduto     Int
   quantidade    Int

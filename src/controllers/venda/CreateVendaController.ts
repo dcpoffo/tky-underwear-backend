@@ -3,7 +3,8 @@ import { CreateVendaService } from "../../services/venda/CreateVendaService";
 
 interface CreateVendaProps {
     valorVenda: number,
-    itensVenda: ItensVendaProps[]
+    itensVenda: ItensVendaProps[],
+    descricao: string,
 }
 
 interface ItensVendaProps {
@@ -16,11 +17,11 @@ interface ItensVendaProps {
 class CreateVendaController {
     async handle(request: FastifyRequest, reply: FastifyReply) {
 
-        const {valorVenda, itensVenda} = request.body as CreateVendaProps;
+        const {valorVenda, itensVenda, descricao} = request.body as CreateVendaProps;
         
         const vendaService = new CreateVendaService();
 
-        const venda = await vendaService.execute({valorVenda, itensVenda});
+        const venda = await vendaService.execute({valorVenda, itensVenda, descricao});
 
         reply.send(venda);
     }

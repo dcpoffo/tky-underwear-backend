@@ -2,7 +2,8 @@ import prismaClient from "../../prisma";
 
 interface CreateVendaProps {
     valorVenda?: number, // permitir que o valorVenda seja opcional
-    itensVenda: ItensVendaProps[]
+    itensVenda: ItensVendaProps[],
+    descricao: string,
 }
 
 interface ItensVendaProps {
@@ -14,7 +15,7 @@ interface ItensVendaProps {
 
 class CreateVendaService {
 
-    async execute({ itensVenda }: CreateVendaProps) {
+    async execute({ itensVenda, descricao }: CreateVendaProps) {
 
         try {
             // Verificar se todos os produtos existem e têm estoque suficiente
@@ -43,6 +44,7 @@ class CreateVendaService {
 
             const vendas = await prismaClient.venda.create({
                 data: {
+                    descricao,
                     valorVenda,
                     itensDaVenda: {
                         create: itensVenda.map(item => ({
