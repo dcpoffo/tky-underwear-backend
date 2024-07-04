@@ -59,6 +59,31 @@ class CreateVendaService {
                     itensDaVenda: true 
                 },
             });
+            console.log("Venda criada")
+
+            //criar uma movimentação de saida do estoque
+            
+            const movimentacao = await prismaClient.movimentacaoEstoque.create({
+                data: {
+                    tipo: "1",
+                    descricao: `
+                        Saida de mercadoria.\n
+                        Referente venda número: ${vendas.id}\n
+                        Valor da Venda: R$ ${valorVenda.toFixed(2)}\n
+                        Descrição: ${descricao}`,
+                    itensMovimentacaoEstoque: {
+                        create: itensVenda.map(item => ({
+                            idProduto: item.idProduto,
+                            quantidade: item.quantidade
+                        }))
+                    }
+                },
+                include: {
+                    itensMovimentacaoEstoque: true
+                },
+            });
+            console.log("Movimentação criada")
+
 
             // Atualizar o estoque dos produtos
             for (const item of itensVenda) {
@@ -73,6 +98,7 @@ class CreateVendaService {
                     },
                 });
             }
+            console.log("Estoque atualizado")
 
             return vendas;
 
