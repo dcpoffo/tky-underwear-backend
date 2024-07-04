@@ -26,7 +26,7 @@ model MovimentacaoEstoque {
   // 0 - Entrada 
   // 1 - Saida
   tipo                      String @db.VarChar(1)
-  descricao                 String @db.VarChar(100)
+  descricao                 String @db.VarChar(200)
   data                      DateTime @default(now())
   itensMovimentacaoEstoque  ItensMovimentacaoEstoque[]  
 
@@ -46,7 +46,7 @@ model ItensMovimentacaoEstoque {
 
 model Venda {
   id            Int @id @default(autoincrement())
-  descricao     String @default("Venda") @db.VarChar(100)
+  descricao     String @default("Venda") @db.VarChar(200)
   data          DateTime @default(now())
   valorVenda    Float
   itensDaVenda  ItensVenda[]
