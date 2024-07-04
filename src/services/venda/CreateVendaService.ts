@@ -66,11 +66,10 @@ class CreateVendaService {
             const movimentacao = await prismaClient.movimentacaoEstoque.create({
                 data: {
                     tipo: "1",
-                    descricao: `
-                        Saida de mercadoria.\n
-                        Referente venda número: ${vendas.id}\n
-                        Valor da Venda: R$ ${valorVenda.toFixed(2)}\n
-                        Descrição: ${descricao}`,
+                    descricao: `                        
+                        Ref. venda: ${vendas.id}\n
+                        R$ ${valorVenda.toFixed(2)}\n
+                        ${descricao}`,
                     itensMovimentacaoEstoque: {
                         create: itensVenda.map(item => ({
                             idProduto: item.idProduto,
