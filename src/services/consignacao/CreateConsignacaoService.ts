@@ -1,29 +1,24 @@
 import prismaClient from "../../prisma";
 
-interface CreateVendaProps {
-    valorVenda?: number, // permitir que o valorVenda seja opcional
-    itensVenda: ItensVendaProps[],
+interface CreateConsignacaoProps {
     descricao: string,
+    itensConsignacao: ItensConsignacaoProps[]
 }
 
-interface ItensVendaProps {
+interface ItensConsignacaoProps {
     idProduto: number,
-    quantidade: number,
-    valorUnitario: number,
-    total: number
+    quantidade: number
 }
 
-class CreateVendaService {
+class CreateConsignacaoService {
 
-    async execute({ itensVenda, descricao }: CreateVendaProps) {
-
+    async execute({ descricao, itensConsignacao }: CreateConsignacaoProps) {
         try {
-            // Verificar se todos os produtos existem e têm estoque suficiente
-            for (const item of itensVenda) {
+            for (const item of itensConsignacao) {
                 const findProduto = await prismaClient.produto.findUnique({
                     where: {
                         id: item.idProduto,
-                    },
+                    }
                 });
 
                 if (!findProduto) {
@@ -39,36 +34,28 @@ class CreateVendaService {
                 }
             }
 
-            // Calcular valor da venda se não foi passado como parâmetro
-            const valorVenda = itensVenda.reduce((acc, item) => acc + (item.quantidade * item.valorUnitario), 0);
-
-            const vendas = await prismaClient.venda.create({
+            const vendas = await prismaClient.consignacao.create({
                 data: {
                     descricao,
-                    valorVenda,
-                    itensDaVenda: {
-                        create: itensVenda.map(item => ({
+                    itensConsignacao: {
+                        create: itensConsignacao.map(item => ({
                             idProduto: item.idProduto,
-                            quantidade: item.quantidade,
-                            valorUnitario: item.valorUnitario,
-                            total: (item.quantidade * item.valorUnitario)
+                            quantidade: item.quantidade
                         }))
                     }
                 },
-                include: { 
-                    itensDaVenda: true 
+                include: {
+                    itensConsignacao: true
                 },
             });
-            console.log("Venda criada")
+            console.log("venda consignada criada")
 
-            //criar uma movimentação de saida do estoque
-            
             const movimentacao = await prismaClient.movimentacaoEstoque.create({
                 data: {
                     tipo: "1",
-                    descricao: `Ref. venda: ${vendas.id}\nR$ ${valorVenda.toFixed(2)}\n${descricao}`,
+                    descricao: `Ref. venda consignada: ${vendas.id}\n{descricao}`,
                     itensMovimentacaoEstoque: {
-                        create: itensVenda.map(item => ({
+                        create: itensConsignacao.map(item => ({
                             idProduto: item.idProduto,
                             quantidade: item.quantidade
                         }))
@@ -81,7 +68,7 @@ class CreateVendaService {
             console.log("Movimentação criada")
 
             // Atualizar o estoque dos produtos
-            for (const item of itensVenda) {
+            for (const item of itensConsignacao) {
                 await prismaClient.produto.update({
                     where: {
                         id: item.idProduto
@@ -98,11 +85,11 @@ class CreateVendaService {
             return vendas;
 
         } catch (error) {
-            // Captura e trata erros
-            console.log("Erro ao cadastrar venda: ", error);
+            console.log("Erro ao cadastrar venda consignada: ", error);
             throw error; // Lança o erro para ser tratado no lado do cliente
         }
     }
+
 }
 
-export { CreateVendaService };
+export { CreateConsignacaoService }

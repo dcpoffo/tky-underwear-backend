@@ -7,6 +7,8 @@ import { ListProdutosController } from "./controllers/produto/ListProdutosContro
 import { UpdateProdutoController } from "./controllers/produto/UpdateProdutoController"
 import { CreateVendaController } from "./controllers/venda/CreateVendaController"
 import { ListVendaController } from "./controllers/venda/ListVendaController"
+import { ListConsignacaoController } from "./controllers/consignacao/ListConsignacaoController"
+import { CreateConsignacaoController } from "./controllers/consignacao/CreateConsignacaoController"
 
 export async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
 
@@ -50,6 +52,15 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
     fastify.post("/vendas", async (request: FastifyRequest, reply: FastifyReply) => {
         return new CreateVendaController().handle(request, reply);
     })  
+
+    //Consignacao
+    fastify.get("/consignacoes", async (request: FastifyRequest, reply: FastifyReply) => {
+        return new ListConsignacaoController().handle(request, reply);
+    })
+
+    fastify.post("/consignacoes", async (request: FastifyRequest, reply: FastifyReply) => {
+        return new CreateConsignacaoController().handle(request, reply);
+    }) 
     
 
 }

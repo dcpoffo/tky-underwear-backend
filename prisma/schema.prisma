@@ -17,6 +17,7 @@ model Produto {
   barra                     String? @db.VarChar(13)
   itensVenda                ItensVenda[]
   itensMovimentacaoEstoque  ItensMovimentacaoEstoque[]
+  itensConsignacao          ItensConsignacao[]
 
   @@map("produtos")
 }
@@ -65,4 +66,23 @@ model ItensVenda {
   venda         Venda  @relation(fields: [idVenda], references: [id])
 
   @@map("itensVenda")
+}
+
+model Consignacao {
+  id            Int @id @default(autoincrement())
+  descricao     String @default("Venda") @db.VarChar(200)
+  data          DateTime @default(now())  
+  itensConsignacao  ItensConsignacao[]
+
+  @@map("consignacao")
+}
+
+model ItensConsignacao {
+  id                  Int @id @default(autoincrement())
+  idConsignacao       Int
+  idProduto           Int
+  quantidade          Int  
+  produto             Produto @relation(fields: [idProduto], references: [id])
+  consignacao         Consignacao  @relation(fields: [idConsignacao], references: [id])
+
 }
