@@ -51,6 +51,7 @@ model Venda {
   data          DateTime @default(now())
   valorVenda    Float
   itensDaVenda  ItensVenda[]
+  consignacao   Boolean? @default(false)
 
   @@map("venda")
 }

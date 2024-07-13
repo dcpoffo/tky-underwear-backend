@@ -4,6 +4,7 @@ interface CreateVendaProps {
     valorVenda?: number, // permitir que o valorVenda seja opcional
     itensVenda: ItensVendaProps[],
     descricao: string,
+    consignacao?: boolean,
 }
 
 interface ItensVendaProps {
@@ -15,7 +16,7 @@ interface ItensVendaProps {
 
 class CreateVendaService {
 
-    async execute({ itensVenda, descricao }: CreateVendaProps) {
+    async execute({ itensVenda, descricao, consignacao }: CreateVendaProps) {
 
         try {
             // Verificar se todos os produtos existem e têm estoque suficiente
@@ -46,6 +47,7 @@ class CreateVendaService {
                 data: {
                     descricao,
                     valorVenda,
+                    consignacao,
                     itensDaVenda: {
                         create: itensVenda.map(item => ({
                             idProduto: item.idProduto,
@@ -59,41 +61,43 @@ class CreateVendaService {
                     itensDaVenda: true 
                 },
             });
-            console.log("Venda criada")
+            console.log("Venda criada")             
 
-            //criar uma movimentação de saida do estoque
-            
-            const movimentacao = await prismaClient.movimentacaoEstoque.create({
-                data: {
-                    tipo: "1",
-                    descricao: `Ref. venda: ${vendas.id}\nR$ ${valorVenda.toFixed(2)}\n${descricao}`,
-                    itensMovimentacaoEstoque: {
-                        create: itensVenda.map(item => ({
-                            idProduto: item.idProduto,
-                            quantidade: item.quantidade
-                        }))
-                    }
-                },
-                include: {
-                    itensMovimentacaoEstoque: true
-                },
-            });
-            console.log("Movimentação criada")
-
-            // Atualizar o estoque dos produtos
-            for (const item of itensVenda) {
-                await prismaClient.produto.update({
-                    where: {
-                        id: item.idProduto
-                    },
+            // se não for venda consignada, cria movimentação e atualiza estoque
+            if (!consignacao) {            
+                //criar uma movimentação de saida do estoque            
+                const movimentacao = await prismaClient.movimentacaoEstoque.create({
                     data: {
-                        qtdEstoque: {
-                            decrement: item.quantidade,
-                        },
+                        tipo: "1",
+                        descricao: `Ref. venda: ${vendas.id}\nR$ ${valorVenda.toFixed(2)}\n${descricao}`,
+                        itensMovimentacaoEstoque: {
+                            create: itensVenda.map(item => ({
+                                idProduto: item.idProduto,
+                                quantidade: item.quantidade
+                            }))
+                        }
+                    },
+                    include: {
+                        itensMovimentacaoEstoque: true
                     },
                 });
+                console.log("Movimentação criada")
+
+                // Atualizar o estoque dos produtos
+                for (const item of itensVenda) {
+                    await prismaClient.produto.update({
+                        where: {
+                            id: item.idProduto
+                        },
+                        data: {
+                            qtdEstoque: {
+                                decrement: item.quantidade,
+                            },
+                        },
+                    });
+                }
+                console.log("Estoque atualizado")
             }
-            console.log("Estoque atualizado")
 
             return vendas;
 
