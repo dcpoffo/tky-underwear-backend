@@ -53,7 +53,7 @@ class CreateConsignacaoService {
             const movimentacao = await prismaClient.movimentacaoEstoque.create({
                 data: {
                     tipo: "1",
-                    descricao: `Ref. venda consignada: ${vendas.id}\n{descricao}`,
+                    descricao: `Ref. venda consignada: ${vendas.id}\n${descricao}`,
                     itensMovimentacaoEstoque: {
                         create: itensConsignacao.map(item => ({
                             idProduto: item.idProduto,
