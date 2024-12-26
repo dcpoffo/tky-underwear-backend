@@ -5,9 +5,14 @@ class ListProdutosService {
 
         const produtos = await prismaClient.produto.findMany(
             {
-                orderBy: {
+                orderBy:
+                {
+                    descricao: 'asc',
+                    modelagem: 'asc',
+                    tipo: 'asc',
                     id: 'asc'
-                }
+                },
+                //descricao, modelagem, tipo, id
             }
         );
 

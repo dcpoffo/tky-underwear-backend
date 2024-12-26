@@ -13,7 +13,7 @@ class ListMovimentacaoEstoqueService {
                     }
                 },
                 orderBy: {
-                    data: 'asc'
+                    data: 'desc'
                 }
             }
         );

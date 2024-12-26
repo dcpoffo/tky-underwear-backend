@@ -13,7 +13,7 @@ class ListVendaService {
                     }
                 },
                 orderBy: {
-                    id: 'asc'
+                    data: 'desc'
                 }
             }
         );

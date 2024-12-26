@@ -13,11 +13,11 @@ class ListConsignacaoService {
                     }
                 },
                 orderBy: {
-                    id: 'asc'
+                    data: 'desc'
                 }
             }
         );
-        
+
         return vendas
     };
 }
